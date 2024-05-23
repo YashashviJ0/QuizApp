@@ -1,11 +1,31 @@
-import { Form } from "antd";
+import { Form, message } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../../../apicalls/users";
+import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 
 function Register() {
-    const onFinish = (values) => {
-        console.log(values)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const onFinish = async (values) => {
+        try {
+            dispatch(ShowLoading());
+            const response = await registerUser(values);
+
+            dispatch(HideLoading());
+            if (response.success) {
+                message.success(response.message);
+                navigate("/login");
+            } else {
+                message.error(response.message);
+            }
+        } catch (error) {
+            dispatch(HideLoading());
+            message.error(error.message);
+        }
     };
+
     return (
         <div className="flex justify-center items-center h-screen w-screen bg-primary">
             <div className="card w-400 p-3 bg-white">
