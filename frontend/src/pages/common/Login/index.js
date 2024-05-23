@@ -11,7 +11,7 @@ function Login() {
             <div className="card">
                 <div className="flex flex-col">
                     <div className="flex">
-                        <h1 className="text-2xl">LOGIN </h1>
+                        <h1 className="text-2xl"> LOGIN </h1>
 
 
                         <div className="divider"></div>
