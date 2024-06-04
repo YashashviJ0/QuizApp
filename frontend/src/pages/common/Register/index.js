@@ -6,25 +6,25 @@ import { registerUser } from "../../../apicalls/users";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 
 function Register() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const onFinish = async (values) => {
-        try {
-            dispatch(ShowLoading());
-            const response = await registerUser(values);
+    // const dispatch = useDispatch();
+    // const navigate = useNavigate();
+    // const onFinish = async (values) => {
+    //     try {
+    //         dispatch(ShowLoading());
+    //         const response = await registerUser(values);
 
-            dispatch(HideLoading());
-            if (response.success) {
-                message.success(response.message);
-                navigate("/login");
-            } else {
-                message.error(response.message);
-            }
-        } catch (error) {
-            dispatch(HideLoading());
-            message.error(error.message);
-        }
-    };
+    //         dispatch(HideLoading());
+    //         if (response.success) {
+    //             message.success(response.message);
+    //             navigate("/login");
+    //         } else {
+    //             message.error(response.message);
+    //         }
+    //     } catch (error) {
+    //         dispatch(HideLoading());
+    //         message.error(error.message);
+    //     }
+    // };
 
     return (
         <div className="flex justify-center items-center h-screen w-screen bg-primary">
@@ -34,7 +34,8 @@ function Register() {
                         REGISTER<i class="ri-user-add-line"></i>
                     </h1>
                     <div className="divider"></div>
-                    <Form layout="vertical" className="mt-2" onFinish={onFinish}>
+                    {/* <Form layout="vertical" className="mt-2" onFinish={onFinish}> */}
+                    <Form layout="vertical" className="mt-2">
                         <Form.Item name="name" label="Name">
                             <input type="text" />
                         </Form.Item>

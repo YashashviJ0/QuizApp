@@ -83,7 +83,7 @@ function ProtectedRoute({ children }) {
         try {
             dispatch(ShowLoading());
             const response = await getUserInfo();
-            dispatch(HideLoading());
+            // dispatch(HideLoading());
             if (response.success) {
                 dispatch(SetUser(response.data));
                 if (response.data.isAdmin) {
@@ -96,7 +96,7 @@ function ProtectedRoute({ children }) {
             }
         } catch (error) {
             navigate("/login");
-            dispatch(HideLoading());
+            // dispatch(HideLoading());
             message.error(error.message);
         }
     };

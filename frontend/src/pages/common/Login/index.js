@@ -6,24 +6,24 @@ import { loginUser } from "../../../apicalls/users";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 
 function Login() {
-    const dispatch = useDispatch();
-    const onFinish = async (values) => {
-        try {
-            dispatch(ShowLoading());
-            const response = await loginUser(values);
-            dispatch(HideLoading());
-            if (response.success) {
-                message.success(response.message);
-                localStorage.setItem("token", response.data);
-                window.location.href = "/";
-            } else {
-                message.error(response.message);
-            }
-        } catch (error) {
-            dispatch(HideLoading());
-            message.error(error.message);
-        }
-    };
+    // const dispatch = useDispatch();
+    // const onFinish = async (values) => {
+    //     try {
+    //         dispatch(ShowLoading());
+    //         const response = await loginUser(values);
+    //         dispatch(HideLoading());
+    //         if (response.success) {
+    //             message.success(response.message);
+    //             localStorage.setItem("token", response.data);
+    //             window.location.href = "/";
+    //         } else {
+    //             message.error(response.message);
+    //         }
+    //     } catch (error) {
+    //         dispatch(HideLoading());
+    //         message.error(error.message);
+    //     }
+    // };
 
     return (
         <div className="flex justify-center items-center h-screen w-screen bg-primary">
@@ -34,7 +34,8 @@ function Login() {
 
                     </div>
                     <div className="divider"></div>
-                    <Form layout="vertical" className="mt-2" onFinish={onFinish}>
+                    {/* <Form layout="vertical" className="mt-2" onFinish={onFinish}> */}
+                    <Form layout="vertical" className="mt-2">
                         <Form.Item name="email" label="Email">
                             <input type="text" />
                         </Form.Item>
