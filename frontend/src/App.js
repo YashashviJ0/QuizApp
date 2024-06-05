@@ -12,28 +12,44 @@ import Home from "./pages/common/Home";
 import Exams from "./pages/admin/Exams";
 import AddEditExam from "./pages/admin/Exams/AddEditExam";
 function App() {
+  //   return (
+  //     <BrowserRouter>
+  //       <Routes>
+  //         <Route path="/login" element={<Login />} />
+  //         <Route path="/register" element={<Register />} />
+  //         <Route path="/" element={<ProtectedRoute>
+  //           <Home />
+  //         </ProtectedRoute>}
+  //         />
+  //         <Route path="/admin/exams" element={<ProtectedRoute>
+  //           <Exams />
+  //         </ProtectedRoute>}
+  //         />
+  //         <Route path="/admin/exams/add" element={<ProtectedRoute>
+  //           <AddEditExam />
+  //         </ProtectedRoute>}
+  //         />
+
+  //         <Route path="/admin/exams/edit/:id" element={<ProtectedRoute>
+  //           <AddEditExam />
+  //         </ProtectedRoute>}
+  //         />
+  //       </Routes>
+  //     </BrowserRouter>
+  //   );
+  // }
+
+  // export default App;
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<ProtectedRoute>
-          <Home />
-        </ProtectedRoute>}
-        />
-        <Route path="/admin/exams" element={<ProtectedRoute>
-          <Exams />
-        </ProtectedRoute>}
-        />
-        <Route path="/admin/exams/add" element={<ProtectedRoute>
-          <AddEditExam />
-        </ProtectedRoute>}
-        />
-
-        <Route path="/admin/exams/edit/:id" element={<ProtectedRoute>
-          <AddEditExam />
-        </ProtectedRoute>}
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/admin/exams" element={<Exams />} />
+        <Route path="/admin/exams/add" element={<AddEditExam />} />
+        <Route path="/admin/exams/edit/:id" element={<AddEditExam />} />
       </Routes>
     </BrowserRouter>
   );

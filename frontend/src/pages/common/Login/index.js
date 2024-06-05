@@ -6,51 +6,48 @@ import { loginUser } from "../../../apicalls/users";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 
 function Login() {
-    // const dispatch = useDispatch();
-    // const onFinish = async (values) => {
-    //     try {
-    //         dispatch(ShowLoading());
-    //         const response = await loginUser(values);
-    //         dispatch(HideLoading());
-    //         if (response.success) {
-    //             message.success(response.message);
-    //             localStorage.setItem("token", response.data);
-    //             window.location.href = "/";
-    //         } else {
-    //             message.error(response.message);
-    //         }
-    //     } catch (error) {
-    //         dispatch(HideLoading());
-    //         message.error(error.message);
-    //     }
-    // };
+    const dispatch = useDispatch();
+    const onFinish = async (values) => {
+        try {
+            dispatch(ShowLoading());
+            const response = await loginUser(values);
+            dispatch(HideLoading());
+            if (response.success) {
+                message.success(response.message);
+                localStorage.setItem("token", response.data);
+                window.location.href = "/";
+            } else {
+                message.error(response.message);
+            }
+        } catch (error) {
+            dispatch(HideLoading());
+            message.error(error.message);
+        }
+    };
 
     return (
         <div className="flex justify-center items-center h-screen w-screen bg-primary">
             <div className="card w-400 p-3 bg-white">
                 <div className="flex flex-col">
                     <div className="flex">
-                        <h1 className="text-2xl">LOGIN <i class="ri-login-circle-line"></i></h1>
-
+                        <h1 className="text-2xl">LOGIN <i className="ri-login-circle-line"></i></h1>
                     </div>
                     <div className="divider"></div>
-                    {/* <Form layout="vertical" className="mt-2" onFinish={onFinish}> */}
-                    <Form layout="vertical" className="mt-2">
-                        <Form.Item name="email" label="Email">
-                            <input type="text" />
+                    <Form layout="vertical" className="mt-2" onFinish={onFinish}>
+                        <Form.Item name="email" label="Email" style={{ width: '90%' }}>
+                            <input type="text" className="w-full p-2 border border-gray-300 rounded" />
                         </Form.Item>
-                        <Form.Item name="password" label="Password">
-                            <input type="password" />
+                        <Form.Item name="password" label="Password" style={{ width: '90%' }}>
+                            <input type="password" className="w-full p-2 border border-gray-300 rounded" />
                         </Form.Item>
-
                         <div className="flex flex-col gap-2">
                             <button
                                 type="submit"
-                                className="primary-contained-btn mt-2 w-100"
+                                className="primary-contained-btn mt-2 w-full bg-blue-500 text-white p-2 rounded"
                             >
                                 Login
                             </button>
-                            <Link to="/register" className="underline">
+                            <Link to="/register" className="underline text-center">
                                 Not a member? Register
                             </Link>
                         </div>
