@@ -83,7 +83,7 @@ function ProtectedRoute({ children }) {
         try {
             dispatch(ShowLoading());
             const response = await getUserInfo();
-            // dispatch(HideLoading());
+            dispatch(HideLoading());
             if (response.success) {
                 dispatch(SetUser(response.data));
                 if (response.data.isAdmin) {
@@ -96,7 +96,7 @@ function ProtectedRoute({ children }) {
             }
         } catch (error) {
             navigate("/login");
-            // dispatch(HideLoading());
+            dispatch(HideLoading());
             message.error(error.message);
         }
     };
@@ -165,12 +165,12 @@ function ProtectedRoute({ children }) {
                                 onClick={() => setCollapsed(false)}
                             ></i>
                         )}
-                        <h1 className="text-2xl text-white">SAWAAL QUIZ</h1>
+                        <h1 className="text-2xl text-white">SAWAAL-QUIZAPP</h1>
                         <div>
                             <div className="flex gap-1 items-center">
                                 <h1 className="text-md text-white">{user?.name}</h1>
                             </div>
-                            <span>Role : {user?.isAdmin ? "Admin" : "User"}</span>
+                            <span>Role: {user?.isAdmin ? "Admin" : "User"}</span>
                         </div>
                     </div>
                     <div className="content">{children}</div>
