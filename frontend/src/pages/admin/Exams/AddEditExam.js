@@ -23,6 +23,8 @@ function AddEditExam() {
         React.useState(false);
     const [selectedQuestion, setSelectedQuestion] = React.useState(null);
     const params = useParams();
+
+    //Add exams
     const onFinish = async (values) => {
         try {
             dispatch(ShowLoading());
@@ -163,17 +165,21 @@ function AddEditExam() {
                                         <input type="number" />
                                     </Form.Item>
                                 </Col>
-                                <Col span={8}>
+
+                                <Col span={1} />
+
+                                <Col span={6}>
                                     <Form.Item label="Category" name="category">
                                         <select name="" id="">
                                             <option value="">Select Category</option>
-                                            <option value="Javascript">Javascript</option>
-                                            <option value="React">React</option>
-                                            <option value="Node">Node</option>
-                                            <option value="MongoDB">MongoDB</option>
+                                            <option value="Maths">Maths</option>
+                                            <option value="RScience">Science</option>
+                                            <option value="English">English</option>
+                                            <option value="Social Science">Social Science</option>
                                         </select>
                                     </Form.Item>
                                 </Col>
+
                                 <Col span={8}>
                                     <Form.Item label="Total Marks" name="totalMarks">
                                         <input type="number" />

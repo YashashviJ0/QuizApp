@@ -1,4 +1,4 @@
-import { Form, message, Input, Button } from "antd";
+import { Form, message, Input, Button, Checkbox } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -62,6 +62,12 @@ function Register() {
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
                             <Input.Password />
+                        </Form.Item>
+                        <Form.Item
+                            name="isAdmin"
+                            valuePropName="checked"
+                        >
+                            <Checkbox>Register as Admin</Checkbox>
                         </Form.Item>
 
                         <div className="flex flex-col gap-2">

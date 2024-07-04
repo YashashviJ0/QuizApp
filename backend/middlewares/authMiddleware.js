@@ -1,11 +1,13 @@
-const jwt = require("jsonwebtoken");
+// Backend/middleware/authenticate.js
 
-module.exports = (req, res, next) => {
+const jwt = require("jsonwebtoken");
+const userModel = require("../models/userModel");
+
+const authenticate = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decodedToken.userId;
-    req.body.userId = userId;
+    req.body.userId = decodedToken.userId;
     next();
   } catch (error) {
     res.status(401).send({
@@ -15,3 +17,5 @@ module.exports = (req, res, next) => {
     });
   }
 };
+
+module.exports = authenticate;

@@ -3,9 +3,9 @@ const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
+const verifyAdmin = require("../middlewares/verifyAdmin"); // Import verifyAdmin middleware
 
 // user registration
-
 router.post("/register", async (req, res) => {
   try {
     // check if user already exists
@@ -22,7 +22,10 @@ router.post("/register", async (req, res) => {
     req.body.password = hashedPassword;
 
     // create new user
-    const newUser = new User(req.body);
+    const newUser = new User({
+      ...req.body,
+      isAdmin: req.body.isAdmin || false,
+    });
     await newUser.save();
     res.send({
       message: "User created successfully",
@@ -38,7 +41,6 @@ router.post("/register", async (req, res) => {
 });
 
 // user login
-
 router.post("/login", async (req, res) => {
   try {
     // check if user exists
@@ -79,7 +81,6 @@ router.post("/login", async (req, res) => {
 });
 
 // get user info
-
 router.post("/get-user-info", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.body.userId);
@@ -95,6 +96,11 @@ router.post("/get-user-info", authMiddleware, async (req, res) => {
       success: false,
     });
   }
+});
+
+// Example of a protected admin route
+router.get("/admin", authMiddleware, verifyAdmin, (req, res) => {
+  res.send("This is a protected admin route");
 });
 
 module.exports = router;
