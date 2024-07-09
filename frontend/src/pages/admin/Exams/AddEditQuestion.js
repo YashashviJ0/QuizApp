@@ -73,13 +73,16 @@ function AddEditQuestion({
           correctOption: selectedQuestion?.correctOption,
         }}
       >
-        <Form.Item name="name" label="Question">
-          <input type="text" />
-        </Form.Item>
-        <Form.Item name="correctOption" label="Correct Option">
-          <input type="text" />
-        </Form.Item>
-
+        <div className="form-item-full-width">
+          <Form.Item name="name" label="Question">
+            <input type="text" className="full-width-input" style={{ width: '90%' }} />
+          </Form.Item>
+        </div>
+        <div className="form-item-full-width">
+          <Form.Item name="correctOption" label="Correct Option">
+            <input type="text" className="full-width-input" style={{ width: '90%' }} />
+          </Form.Item>
+        </div>
         <div className="flex gap-3">
           <Form.Item name="A" label="Option A">
             <input type="text" />

@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PageTitle from "../../../components/PageTitle";
-import { message, Modal, Table } from "antd";
+import { message, Table } from "antd";
 import { useDispatch } from "react-redux";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 import { getAllReportsByUser } from "../../../apicalls/reports";
-import { useEffect } from "react";
 import moment from "moment";
 
 function UserReports() {
     const [reportsData, setReportsData] = React.useState([]);
     const dispatch = useDispatch();
+
     const columns = [
         {
             title: "Exam Name",
             dataIndex: "examName",
-            render: (text, record) => <>{record.exam.name}</>,
+            render: (text, record) => <>{record.exam?.name || 'N/A'}</>,
         },
         {
             title: "Date",
@@ -26,22 +26,22 @@ function UserReports() {
         {
             title: "Total Marks",
             dataIndex: "totalQuestions",
-            render: (text, record) => <>{record.exam.totalMarks}</>,
+            render: (text, record) => <>{record.exam?.totalMarks || 'N/A'}</>,
         },
         {
             title: "Passing Marks",
             dataIndex: "correctAnswers",
-            render: (text, record) => <>{record.exam.passingMarks}</>,
+            render: (text, record) => <>{record.exam?.passingMarks || 'N/A'}</>,
         },
         {
             title: "Obtained Marks",
             dataIndex: "correctAnswers",
-            render: (text, record) => <>{record.result.correctAnswers.length}</>,
+            render: (text, record) => <>{record.result?.correctAnswers.length || 'N/A'}</>,
         },
         {
             title: "Verdict",
             dataIndex: "verdict",
-            render: (text, record) => <>{record.result.verdict}</>,
+            render: (text, record) => <>{record.result?.verdict || 'N/A'}</>,
         },
     ];
 

@@ -67,7 +67,7 @@ function Register() {
                             name="isAdmin"
                             valuePropName="checked"
                         >
-                            <Checkbox>Register as Admin</Checkbox>
+                            {/* <Checkbox>Register as Admin</Checkbox> */}
                         </Form.Item>
 
                         <div className="flex flex-col gap-2">

@@ -6,32 +6,33 @@ import { getExamById } from "../../../apicalls/exams";
 import { addReport } from "../../../apicalls/reports";
 import { HideLoading, ShowLoading } from "../../../redux/loaderSlice";
 import Instructions from "./Instructions";
+import moment from "moment";
 
 function WriteExam() {
-  const [examData, setExamData] = React.useState(null);
-  const [questions = [], setQuestions] = React.useState([]);
-  const [selectedQuestionIndex, setSelectedQuestionIndex] = React.useState(0);
-  const [selectedOptions, setSelectedOptions] = React.useState({});
-  const [result = {}, setResult] = React.useState({});
+  const [examData, setExamData] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const [result, setResult] = useState({});
+  const [view, setView] = useState("instructions");
+  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [timeUp, setTimeUp] = useState(false);
+  const [intervalId, setIntervalId] = useState(null);
+
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [view, setView] = useState("instructions");
-  const [secondsLeft = 0, setSecondsLeft] = useState(0);
-  const [timeUp, setTimeUp] = useState(false);
-  const [intervalId, setIntervalId] = useState(null);
   const { user } = useSelector((state) => state.users);
+
   const getExamData = async () => {
     try {
       dispatch(ShowLoading());
-      const response = await getExamById({
-        examId: params.id,
-      });
+      const response = await getExamById({ examId: params.id });
       dispatch(HideLoading());
       if (response.success) {
         setQuestions(response.data.questions);
         setExamData(response.data);
-        setSecondsLeft(response.data.duration);
+        setSecondsLeft(response.data.duration * 60); // Assuming duration is in minutes
       } else {
         message.error(response.message);
       }
@@ -43,8 +44,8 @@ function WriteExam() {
 
   const calculateResult = async () => {
     try {
-      let correctAnswers = [];
-      let wrongAnswers = [];
+      const correctAnswers = [];
+      const wrongAnswers = [];
 
       questions.forEach((question, index) => {
         if (question.correctOption === selectedOptions[index]) {
@@ -54,16 +55,14 @@ function WriteExam() {
         }
       });
 
-      let verdict = "Pass";
-      if (correctAnswers.length < examData.passingMarks) {
-        verdict = "Fail";
-      }
+      const verdict = correctAnswers.length >= examData.passingMarks ? "Pass" : "Fail";
 
       const tempResult = {
         correctAnswers,
         wrongAnswers,
         verdict,
       };
+
       setResult(tempResult);
       dispatch(ShowLoading());
       const response = await addReport({
@@ -84,16 +83,17 @@ function WriteExam() {
   };
 
   const startTimer = () => {
-    let totalSeconds = examData.duration;
-    const intervalId = setInterval(() => {
-      if (totalSeconds > 0) {
-        totalSeconds = totalSeconds - 1;
-        setSecondsLeft(totalSeconds);
-      } else {
-        setTimeUp(true);
-      }
+    const interval = setInterval(() => {
+      setSecondsLeft((prevSecondsLeft) => {
+        if (prevSecondsLeft <= 1) {
+          clearInterval(interval);
+          setTimeUp(true);
+          return 0;
+        }
+        return prevSecondsLeft - 1;
+      });
     }, 1000);
-    setIntervalId(intervalId);
+    setIntervalId(interval);
   };
 
   useEffect(() => {
@@ -107,7 +107,8 @@ function WriteExam() {
     if (params.id) {
       getExamData();
     }
-  }, []);
+  }, [params.id]);
+
   return (
     examData && (
       <div className="mt-2">
@@ -127,12 +128,10 @@ function WriteExam() {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <h1 className="text-2xl">
-                {selectedQuestionIndex + 1} :{" "}
-                {questions[selectedQuestionIndex].name}
+                {selectedQuestionIndex + 1} : {questions[selectedQuestionIndex].name}
               </h1>
-
               <div className="timer">
-                <span className="text-2xl">{secondsLeft}</span>
+                <span className="text-2xl">{moment.utc(secondsLeft * 1000).format("HH:mm:ss")}</span>
               </div>
             </div>
 
@@ -142,8 +141,8 @@ function WriteExam() {
                   return (
                     <div
                       className={`flex gap-2 flex-col ${selectedOptions[selectedQuestionIndex] === option
-                        ? "selected-option"
-                        : "option"
+                          ? "selected-option"
+                          : "option"
                         }`}
                       key={index}
                       onClick={() => {
@@ -154,8 +153,7 @@ function WriteExam() {
                       }}
                     >
                       <h1 className="text-xl">
-                        {option} :{" "}
-                        {questions[selectedQuestionIndex].options[option]}
+                        {option} : {questions[selectedQuestionIndex].options[option]}
                       </h1>
                     </div>
                   );
@@ -202,22 +200,16 @@ function WriteExam() {
         )}
 
         {view === "result" && (
-          <div className="flex  items-center mt-2 justify-center result">
+          <div className="flex items-center mt-2 justify-center result">
             <div className="flex flex-col gap-2">
               <h1 className="text-2xl">RESULT</h1>
               <div className="divider"></div>
               <div className="marks">
-                <h1 className="text-md">Total Marks : {examData.totalMarks}</h1>
-                <h1 className="text-md">
-                  Obtained Marks :{result.correctAnswers.length}
-                </h1>
-                <h1 className="text-md">
-                  Wrong Answers : {result.wrongAnswers.length}
-                </h1>
-                <h1 className="text-md">
-                  Passing Marks : {examData.passingMarks}
-                </h1>
-                <h1 className="text-md">VERDICT :{result.verdict}</h1>
+                <h1 className="text-md">Total Marks: {examData.totalMarks}</h1>
+                <h1 className="text-md">Obtained Marks: {result.correctAnswers?.length}</h1>
+                <h1 className="text-md">Wrong Answers: {result.wrongAnswers?.length}</h1>
+                <h1 className="text-md">Passing Marks: {examData.passingMarks}</h1>
+                <h1 className="text-md">VERDICT: {result.verdict}</h1>
 
                 <div className="flex gap-2 mt-2">
                   <button
@@ -226,7 +218,7 @@ function WriteExam() {
                       setView("instructions");
                       setSelectedQuestionIndex(0);
                       setSelectedOptions({});
-                      setSecondsLeft(examData.duration);
+                      setSecondsLeft(examData.duration * 60);
                     }}
                   >
                     Retake Exam
@@ -265,6 +257,7 @@ function WriteExam() {
             </div>
           </div>
         )}
+
 
         {view === "review" && (
           <div className="flex flex-col gap-2">
